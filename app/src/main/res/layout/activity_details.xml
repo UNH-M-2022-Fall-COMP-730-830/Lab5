@@ -38,7 +38,7 @@
         android:layout_height="1dp"
         android:background="?android:attr/dividerHorizontal" />
 
-    <com.example.weather.listView.DetailsListView
+    <com.example.weather.listView.ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="0dp"

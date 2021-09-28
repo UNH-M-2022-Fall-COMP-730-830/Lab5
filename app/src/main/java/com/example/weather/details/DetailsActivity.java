@@ -9,7 +9,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.weather.R;
 import com.example.weather.data.Forecast;
-import com.example.weather.listView.DetailsListView;
+import com.example.weather.listView.ListView;
 
 public class DetailsActivity extends AppCompatActivity {
     public static final String FORECAST_EXTRA = "FORECAST";
@@ -17,7 +17,8 @@ public class DetailsActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ImageView icon;
     private TextView description;
-    private DetailsListView listView;
+    private ListView listView;
+    private DetailsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,8 @@ public class DetailsActivity extends AppCompatActivity {
 
     private void initListView() {
         listView = findViewById(R.id.listView);
+        adapter = new DetailsAdapter();
+        listView.setAdapter(adapter);
     }
 
     private void initToolbar() {
@@ -53,6 +56,7 @@ public class DetailsActivity extends AppCompatActivity {
         icon.setImageResource(iconId);
         description.setText(data.getDescription());
         toolbar.setTitle(data.getDateString("EE, MMM dd"));
-        listView.show(data.getDetails());
+        adapter.setData(data.getDetails());
+        listView.notifyDataChanged();
     }
 }

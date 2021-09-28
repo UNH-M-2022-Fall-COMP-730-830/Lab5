@@ -12,7 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.weather.R;
 import com.example.weather.data.Forecast;
 import com.example.weather.details.DetailsActivity;
-import com.example.weather.listView.ForecastListView;
+import com.example.weather.listView.ListView;
 import com.example.weather.network.NetworkRequestCallback;
 import com.example.weather.network.WeatherAPI;
 import com.google.android.material.button.MaterialButton;
@@ -22,10 +22,11 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements NetworkRequestCallback<List<Forecast>>, OnForecastCLickListener {
 
     private Toolbar toolbar;
-    private ForecastListView listView;
+    private ListView listView;
     private LinearLayout errorView;
     private MaterialButton retryButton;
     private ProgressBar progress;
+    private ForecastAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,9 @@ public class MainActivity extends AppCompatActivity implements NetworkRequestCal
 
     private void initListView() {
         listView = findViewById(R.id.listView);
-        listView.setForecastClickListener(this);
+        adapter = new ForecastAdapter();
+        adapter.setForecastClickListener(this);
+        listView.setAdapter(adapter);
     }
 
     private void initProgress() {
@@ -73,7 +76,8 @@ public class MainActivity extends AppCompatActivity implements NetworkRequestCal
     }
 
     private void showData(List<Forecast> data) {
-        listView.show(data);
+        adapter.setData(data);
+        listView.notifyDataChanged();
 
         progress.setVisibility(View.GONE);
         errorView.setVisibility(View.GONE);

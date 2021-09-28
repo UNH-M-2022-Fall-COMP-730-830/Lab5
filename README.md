@@ -48,3 +48,4 @@ See the diagram below for more details.
    3. Initialize `ForecastAdapter` and set it up in the list view.
    4. When you receive the data, pass it into the adapter.
    5. Then don't forget to notify the ListView that the data has changed. 
+   6. Repead the steps 1-5 in the `DetailsActivity`

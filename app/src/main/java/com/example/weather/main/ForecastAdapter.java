@@ -1,68 +1,44 @@
-package com.example.weather.listView;
-
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+package com.example.weather.main;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.weather.R;
 import com.example.weather.data.Forecast;
-import com.example.weather.main.OnForecastCLickListener;
+import com.example.weather.listView.ListViewAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A view that allows to display {@link Forecast} item views in a scrollable list.
- */
-public class ForecastListView extends ScrollView {
+public class ForecastAdapter implements ListViewAdapter {
 
-    private LinearLayout container;
+    private List<Forecast> data;
     private OnForecastCLickListener onForecastClickListener;
 
-    public ForecastListView(Context context) {
-        super(context);
-        init(context);
+    public void setData(List<Forecast> data) {
+        this.data = data;
     }
 
-    public ForecastListView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init(context);
+    public void setForecastClickListener(OnForecastCLickListener onForecastClickListener) {
+        this.onForecastClickListener = onForecastClickListener;
     }
 
-    public ForecastListView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init(context);
-    }
-
-    public ForecastListView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        init(context);
-    }
-
-    private void init(Context context) {
-        container = new LinearLayout(context);
-        container.setOrientation(LinearLayout.VERTICAL);
-        addView(container, new ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT));
-    }
-
-    public void show(List<Forecast> data) {
-        container.removeAllViews();
+    @Override
+    public List<View> getViews(Context context) {
+        List<View> views = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
-            View view = getView(i, data.get(i), getContext());
-            container.addView(view, new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+            views.add(getView(i, context));
         }
+        return views;
     }
 
-    private View getView(int position, Forecast item, Context context) {
+    private View getView(int position, Context context) {
+        Forecast item = data.get(position);
+
         // Select layout resource for the view. We use enlarged view for the first item.
         int layoutRes = R.layout.item_forecast;
         if (position == 0) {
@@ -107,9 +83,5 @@ public class ForecastListView extends ScrollView {
 
         // Return final view
         return view;
-    }
-
-    public void setForecastClickListener(OnForecastCLickListener onForecastClickListener) {
-        this.onForecastClickListener = onForecastClickListener;
     }
 }
