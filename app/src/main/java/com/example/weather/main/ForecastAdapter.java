@@ -16,8 +16,8 @@ import java.util.List;
 
 public class ForecastAdapter implements ListViewAdapter {
 
-    private List<Forecast> data;
-    private OnForecastCLickListener onForecastClickListener;
+    private List<Forecast> data = new ArrayList<>();
+    private OnForecastCLickListener onForecastClickListener = null;
 
     public void setData(List<Forecast> data) {
         this.data = data;
