@@ -1,23 +1,25 @@
 package com.example.weather.main;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.weather.R;
 import com.example.weather.data.Forecast;
-import com.example.weather.listView.ListViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ForecastAdapter implements ListViewAdapter {
+public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHolder> {
 
-    private List<Forecast> data;
-    private OnForecastCLickListener onForecastClickListener;
+    private List<Forecast> data = new ArrayList<>();
+    private OnForecastCLickListener onForecastClickListener = null;
 
     public void setData(List<Forecast> data) {
         this.data = data;
@@ -28,60 +30,78 @@ public class ForecastAdapter implements ListViewAdapter {
     }
 
     @Override
-    public List<View> getViews(Context context) {
-        List<View> views = new ArrayList<>();
-        for (int i = 0; i < data.size(); i++) {
-            views.add(getView(i, context));
-        }
-        return views;
+    public int getItemCount() {
+        return data.size();
     }
 
-    private View getView(int position, Context context) {
-        Forecast item = data.get(position);
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0)
+            return 0;
+        else return 1;
+    }
 
-        // Select layout resource for the view. We use enlarged view for the first item.
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         int layoutRes = R.layout.item_forecast;
-        if (position == 0) {
+        if (viewType == 0) {
             layoutRes = R.layout.item_forecast_primary;
         }
+        View view = LayoutInflater.from(parent.getContext()).inflate(layoutRes, parent, false);
+        return new ViewHolder(view);
+    }
 
-        // Inflate the view from the XML
-        View view = LayoutInflater.from(context).inflate(layoutRes, null);
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Forecast item = data.get(position);
+        holder.bind(item, position);
+    }
 
-        // Weather Icon
-        ImageView weatherIcon = view.findViewById(R.id.weather_icon);
-        Resources resources = context.getResources();
-        int iconId = resources.getIdentifier(item.getIcon(), "drawable", context.getPackageName());
-        weatherIcon.setImageResource(iconId);
+    class ViewHolder extends RecyclerView.ViewHolder {
+        private ImageView weatherIcon;
+        private TextView date;
+        private TextView weatherDescription;
+        private TextView highTemperature;
+        private TextView lowTemperature;
 
-        // Date String
-        TextView date = view.findViewById(R.id.date);
-        String dateString = item.getDateString("EE, MMM dd");
-        if (position == 0) {
-            dateString = item.getDateString("'Today', MMM dd");
+        public ViewHolder(@NonNull View view) {
+            super(view);
+            weatherIcon = view.findViewById(R.id.weather_icon);
+            date = view.findViewById(R.id.date);
+            weatherDescription = view.findViewById(R.id.weather_description);
+            highTemperature = view.findViewById(R.id.high_temperature);
+            lowTemperature = view.findViewById(R.id.low_temperature);
         }
-        date.setText(dateString);
 
-        // Weather Description
-        TextView weatherDescription = view.findViewById(R.id.weather_description);
-        weatherDescription.setText(item.getDescription());
+        public void bind(Forecast item, int position) {
+            // Weather Icon
+            Resources resources = itemView.getResources();
+            int iconId = resources.getIdentifier(item.getIcon(), "drawable", itemView.getContext().getPackageName());
+            weatherIcon.setImageResource(iconId);
 
-        // High Temp
-        TextView highTemperature = view.findViewById(R.id.high_temperature);
-        highTemperature.setText(item.getHighTemp() + "\u00b0");
-
-        // Low Temp
-        TextView lowTemperature = view.findViewById(R.id.low_temperature);
-        lowTemperature.setText(item.getLowTemp() + "\u00b0");
-
-        // OnClickListener
-        view.setOnClickListener(v -> {
-            if (onForecastClickListener != null) {
-                onForecastClickListener.onForecastClick(item);
+            // Date String
+            String dateString = item.getDateString("EE, MMM dd");
+            if (position == 0) {
+                dateString = item.getDateString("'Today', MMM dd");
             }
-        });
+            date.setText(dateString);
 
-        // Return final view
-        return view;
+            // Weather Description
+            weatherDescription.setText(item.getDescription());
+
+            // High Temp
+            highTemperature.setText(item.getHighTemp() + "\u00b0");
+
+            // Low Temp
+            lowTemperature.setText(item.getLowTemp() + "\u00b0");
+
+            // OnClickListener
+            itemView.setOnClickListener(v -> {
+                if (onForecastClickListener != null) {
+                    onForecastClickListener.onForecastClick(item);
+                }
+            });
+        }
     }
 }

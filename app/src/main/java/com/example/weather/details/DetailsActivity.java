@@ -6,10 +6,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weather.R;
 import com.example.weather.data.Forecast;
-import com.example.weather.listView.ListView;
 
 public class DetailsActivity extends AppCompatActivity {
     public static final String FORECAST_EXTRA = "FORECAST";
@@ -17,7 +17,7 @@ public class DetailsActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ImageView icon;
     private TextView description;
-    private ListView listView;
+    private RecyclerView listView;
     private DetailsAdapter adapter;
 
     @Override
@@ -57,6 +57,5 @@ public class DetailsActivity extends AppCompatActivity {
         description.setText(data.getDescription());
         toolbar.setTitle(data.getDateString("EE, MMM dd"));
         adapter.setData(data.getDetails());
-        listView.notifyDataChanged();
     }
 }

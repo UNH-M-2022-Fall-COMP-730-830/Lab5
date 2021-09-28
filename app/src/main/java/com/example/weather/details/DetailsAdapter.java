@@ -1,18 +1,20 @@
 package com.example.weather.details;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weather.R;
 import com.example.weather.data.ForecastDetails;
-import com.example.weather.listView.ListViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DetailsAdapter implements ListViewAdapter {
+public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.ViewHolder> {
 
     private List<ForecastDetails> data = new ArrayList<>();
 
@@ -21,27 +23,36 @@ public class DetailsAdapter implements ListViewAdapter {
     }
 
     @Override
-    public List<View> getViews(Context context) {
-        List<View> views = new ArrayList<>();
-        for (ForecastDetails item : data) {
-            views.add(getView(item, context));
-        }
-        return views;
+    public int getItemCount() {
+        return data.size();
     }
 
-    private View getView(ForecastDetails item, Context context) {
-        // Inflate the view from XML
-        View view = LayoutInflater.from(context).inflate(R.layout.item_details, null);
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_details, parent, false);
+        return new ViewHolder(view);
+    }
 
-        // Description
-        TextView description = view.findViewById(R.id.name);
-        description.setText(item.getDescription());
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        ForecastDetails item = data.get(position);
+        holder.bind(item);
+    }
 
-        // Value
-        TextView value = view.findViewById(R.id.value);
-        value.setText(item.getValue());
+    class ViewHolder extends RecyclerView.ViewHolder {
+        private TextView name;
+        private TextView value;
 
-        // Return view
-        return view;
+        public ViewHolder(@NonNull View view) {
+            super(view);
+            name = view.findViewById(R.id.name);
+            value = view.findViewById(R.id.value);
+        }
+
+        public void bind(ForecastDetails details) {
+            name.setText(details.getDescription());
+            value.setText(details.getValue());
+        }
     }
 }

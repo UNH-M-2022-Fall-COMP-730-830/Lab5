@@ -8,11 +8,11 @@ import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weather.R;
 import com.example.weather.data.Forecast;
 import com.example.weather.details.DetailsActivity;
-import com.example.weather.listView.ListView;
 import com.example.weather.network.NetworkRequestCallback;
 import com.example.weather.network.WeatherAPI;
 import com.google.android.material.button.MaterialButton;
@@ -22,7 +22,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements NetworkRequestCallback<List<Forecast>>, OnForecastCLickListener {
 
     private Toolbar toolbar;
-    private ListView listView;
+    private RecyclerView listView;
     private LinearLayout errorView;
     private MaterialButton retryButton;
     private ProgressBar progress;
@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements NetworkRequestCal
 
     private void showData(List<Forecast> data) {
         adapter.setData(data);
-        listView.notifyDataChanged();
 
         progress.setVisibility(View.GONE);
         errorView.setVisibility(View.GONE);

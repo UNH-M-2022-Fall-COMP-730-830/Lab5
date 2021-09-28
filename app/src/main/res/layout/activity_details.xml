@@ -38,11 +38,12 @@
         android:layout_height="1dp"
         android:background="?android:attr/dividerHorizontal" />
 
-    <com.example.weather.listView.ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_details" />
 
 </LinearLayout>
