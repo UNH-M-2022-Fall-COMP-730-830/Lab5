@@ -7,7 +7,7 @@ Powered by [Weatherbit.io API](https://www.weatherbit.io/api)
 
 ## Objectives
 - Learn how to use and implement Adapter Design Pattern.
-- Introduce the Open-Closed Principle.
+- Review the Open-Closed Principle.
 - Introduce the use of REST API.
 
 ## Instructions
